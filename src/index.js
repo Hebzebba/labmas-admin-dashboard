@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./assets/scss/style.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import Loader from "./layouts/loader/Loader";
 
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
@@ -18,11 +18,11 @@ const options = {
 };
 ReactDOM.render(
   <Suspense fallback={<Loader />}>
-    <HashRouter>
+    <Router>
       <AlertProvider template={AlertTemplate} {...options}>
         <App />
       </AlertProvider>
-    </HashRouter>
+    </Router>
   </Suspense>,
 
   document.getElementById("root")

@@ -18,6 +18,12 @@ const navigation = [
     href: "/add",
     icon: "bi bi-textarea-resize",
   },
+
+  {
+    title: "Manage Account",
+    href: "/manage",
+    icon: "bi bi-bag-plus",
+  },
 ];
 
 const Sidebar = () => {

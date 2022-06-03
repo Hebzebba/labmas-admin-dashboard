@@ -70,13 +70,18 @@ const Header = () => {
             ></img>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
-            <DropdownItem>My Account</DropdownItem>
-            <DropdownItem>Edit Profile</DropdownItem>
-            <DropdownItem divider />
-            <DropdownItem>My Balance</DropdownItem>
-            <DropdownItem>Inbox</DropdownItem>
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem>
+              <small>Welcome </small>{" "}
+              <span>{localStorage.getItem("admin")}</span>
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
+            >
+              Logout
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>
