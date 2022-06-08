@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../Global";
+import { DEV_URL, BASE_URL } from "../Global";
 
 export const fetchData = () =>
   axios
@@ -13,18 +13,26 @@ export const addLaundryOwner = (
   contact,
   date,
   laundryName,
+  info,
   longitude,
   latitude
 ) =>
   axios
-    .post(`${BASE_URL}/owner/register`, {
+    .post(`${DEV_URL}/owner/register`, {
       fullName,
       email,
       contact,
       date,
       laundryName,
+      info,
       longitude,
       latitude,
     })
     .then((res) => res.data)
     .catch((err) => err);
+
+export const getLaundryInfo = () =>
+  axios
+    .get(`${DEV_URL}/owners`)
+    .then((res) => res.data)
+    .catch((err) => console.error(err));

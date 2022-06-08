@@ -7,13 +7,13 @@ import { useAlert } from "react-alert";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import axios from "axios";
+import { BASE_URL, DEV_URL } from "../../Global";
 
 const override = css`
   display: block;
   margin: 0 auto;
   border-color: red;
 `;
-const DEV_URL = "http://localhost:8080/api/admin-login";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -33,7 +33,7 @@ const Login = () => {
     e.preventDefault();
     set_login_status(true);
     axios
-      .post(DEV_URL, { email: user, password: pass })
+      .post(`${DEV_URL}/admin-login`, { email: user, password: pass })
       .then((res) => {
         if (res.data) {
           set_login_status(false);

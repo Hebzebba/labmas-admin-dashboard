@@ -22,6 +22,7 @@ const Forms = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [laundryName, setLaundryName] = useState("");
+  const [info, setInfo] = useState("");
   const [date, setDate] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
@@ -38,6 +39,7 @@ const Forms = () => {
         phone,
         date,
         laundryName,
+        info,
         longitude,
         latitude
       );
@@ -98,6 +100,15 @@ const Forms = () => {
                   type="text"
                   value={laundryName}
                   onChange={(e) => setLaundryName(e.target.value)}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="info">Description</Label>
+                <Input
+                  id="info"
+                  name="text"
+                  type="textarea"
+                  onChange={(e) => setInfo(e.target.value)}
                 />
               </FormGroup>
 

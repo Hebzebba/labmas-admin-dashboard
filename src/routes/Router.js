@@ -16,6 +16,10 @@ const ManageAccount = lazy(() =>
   import("../views/manage-account/Manage_account")
 );
 
+const ManageClients = lazy(() =>
+  import("../views/manage-clients/ManageClients")
+);
+
 /*****Routes******/
 
 const ThemeRoutes = [
@@ -32,6 +36,7 @@ const ThemeRoutes = [
       { path: "/orders", exact: true, element: <Tables /> },
       { path: "/add", exact: true, element: <Forms /> },
       { path: "/manage", exact: true, element: <ManageAccount /> },
+      { path: "/manage-client", exact: true, element: <ManageClients /> },
     ],
   },
   { path: "/login", element: <Login /> },

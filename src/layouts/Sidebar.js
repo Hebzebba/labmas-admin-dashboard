@@ -18,7 +18,11 @@ const navigation = [
     href: "/add",
     icon: "bi bi-textarea-resize",
   },
-
+  {
+    title: "Manage Clients",
+    href: "/manage-client",
+    icon: "bi bi-people",
+  },
   {
     title: "Manage Account",
     href: "/manage",
