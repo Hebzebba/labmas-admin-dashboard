@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle, Table, Button } from "reactstrap";
+import Spinner from "../../components/spinner/Spinner";
 import { getLaundryInfo } from "../../api/Api";
 import "./ManageClients.css";
 
 const ManageClients = () => {
   const [laundryInfo, setLaundryInfo] = useState();
+  const [load, setLoad] = useState(false);
   useEffect(() => {
     const getLaundrydata = async () => {
       const data = await getLaundryInfo();
       setLaundryInfo(data);
-      console.log(data);
+      if (data) {
+        setLoad(true);
+      }
     };
 
     getLaundrydata();
@@ -32,7 +36,7 @@ const ManageClients = () => {
               </tr>
             </thead>
             <tbody>
-              {laundryInfo &&
+              {load ? (
                 laundryInfo.map((item, index) => (
                   <tr className="border-top" key={index}>
                     <td>
@@ -65,7 +69,10 @@ const ManageClients = () => {
                       </Button>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <Spinner />
+              )}
             </tbody>
           </Table>
         </CardBody>

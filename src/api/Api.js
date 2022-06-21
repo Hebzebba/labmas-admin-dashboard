@@ -1,6 +1,12 @@
 import axios from "axios";
 import { DEV_URL, BASE_URL } from "../Global";
 
+export const getAdminData = () =>
+  axios
+    .get(`${DEV_URL}/admin/getAdminData`)
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
+
 export const fetchData = () =>
   axios
     .get(`${BASE_URL}/orders`)
