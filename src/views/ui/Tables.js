@@ -1,11 +1,11 @@
-import ProjectTables from "../../components/dashboard/ProjectTable";
+import OrdersTable from "../../components/dashboard/OrdersTable";
 import { Row, Col } from "reactstrap";
 
 const Tables = () => {
   return (
     <Row>
       <Col lg="12">
-        <ProjectTables />
+        <OrdersTable />
       </Col>
     </Row>
   );

@@ -1,4 +1,4 @@
-import { Card, CardBody, CardSubtitle, CardTitle, Row, Col } from "reactstrap";
+import { Card, CardBody, CardTitle, Row, Col } from "reactstrap";
 import Chart from "react-apexcharts";
 
 const SalesChart = () => {
@@ -69,27 +69,17 @@ const SalesChart = () => {
   return (
     <Card>
       <CardBody>
-        <CardTitle tag="h5">Sales Summary</CardTitle>
-        <CardSubtitle className="text-muted" tag="h6">
-          Yearly Sales Report
-        </CardSubtitle>
+        <CardTitle tag="h5">History</CardTitle>
         <div className="bg-primary text-white my-3 p-3 rounded">
           <Row>
-            <Col md="4">
-              <h6>Total Sales</h6>
-              <h4 className="mb-0 fw-bold">$10,345</h4>
-            </Col>
-            <Col md="4">
-              <h6>This Month</h6>
-              <h4 className="mb-0 fw-bold">$7,545</h4>
-            </Col>
-            <Col md="4">
-              <h6>This Week</h6>
-              <h4 className="mb-0 fw-bold">$1,345</h4>
+            <Col md="12">
+              <center>
+              <h6>Number of Clients and Number of Orders</h6>
+              </center>
             </Col>
           </Row>
         </div>
-        <Chart options={options} series={series} type="area" height="279" />
+        <Chart options={options} series={series} type="bar" height="279" />
       </CardBody>
     </Card>
   );

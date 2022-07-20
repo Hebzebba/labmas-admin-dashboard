@@ -68,6 +68,7 @@ const Forms = () => {
                   type="text"
                   value={fName}
                   onChange={(e) => setFname(e.target.value)}
+                  required
                 />
               </FormGroup>
 
@@ -90,6 +91,7 @@ const Forms = () => {
                   inputStyle={{ width: "100%" }}
                   value={phone}
                   onChange={(phone) => setPhone(phone)}
+                  required
                 />
               </FormGroup>
               <FormGroup>
@@ -100,6 +102,7 @@ const Forms = () => {
                   type="text"
                   value={laundryName}
                   onChange={(e) => setLaundryName(e.target.value)}
+                  required
                 />
               </FormGroup>
               <FormGroup>
@@ -120,6 +123,7 @@ const Forms = () => {
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
+                  required
                 />
               </FormGroup>
               <Label>Coordinate</Label>
@@ -133,6 +137,7 @@ const Forms = () => {
                       type="number"
                       value={longitude}
                       onChange={(e) => setLongitude(e.target.value)}
+                      required
                     />
                   </FormGroup>
                 </Col>
@@ -145,6 +150,7 @@ const Forms = () => {
                       type="number"
                       value={latitude}
                       onChange={(e) => setLatitude(e.target.value)}
+                      required
                     />
                   </FormGroup>
                 </Col>

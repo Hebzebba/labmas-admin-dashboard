@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, CardTitle, Table } from "reactstrap";
+import { Card, CardBody, CardTitle, Table, Input } from "reactstrap";
+import Spinner from "../spinner/Spinner";
 import { fetchData } from "../../api/Api";
-import { css } from "@emotion/react";
-import PacmanLoader from "react-spinners/PacmanLoader";
 
 import user2 from "../../assets/images/users/user2.jpg";
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-`;
-
-const ProjectTables = () => {
+const OrdersTable = () => {
   const [data, setData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -44,7 +37,7 @@ const ProjectTables = () => {
             {dataLoaded ? (
               <tbody>
                 {data.map((tdata, index) => (
-                  <tr key={index} className="border-top">
+                  <tr key={index} className="border-top table-hover">
                     <td>
                       <div className="d-flex align-items-center p-2">
                         <img
@@ -75,24 +68,13 @@ const ProjectTables = () => {
                     </td>
                     <td>{tdata.date}</td>
                     <td>
-                      <span className="p-2 bg-warning rounded-circle d-inline-block ms-3"></span>
+                      <Input id="exampleCheck" name="check" type="checkbox" />
                     </td>
                   </tr>
                 ))}
               </tbody>
             ) : (
-              <tbody>
-                <tr>
-                  <td>
-                    <PacmanLoader
-                      color="#03fcf8"
-                      loading={!dataLoaded}
-                      css={override}
-                      size={24}
-                    />
-                  </td>
-                </tr>
-              </tbody>
+              <Spinner toggle={dataLoaded} />
             )}
           </Table>
         </CardBody>
@@ -101,4 +83,4 @@ const ProjectTables = () => {
   );
 };
 
-export default ProjectTables;
+export default OrdersTable;
