@@ -3,7 +3,7 @@ import { DEV_URL, BASE_URL } from "../Global";
 
 export const getAdminData = () =>
   axios
-    .get(`${DEV_URL}/admin/getAdminData`)
+    .get(`${BASE_URL}/admin/getAdminData`)
     .then((res) => console.log(res.data))
     .catch((err) => console.log(err));
 
@@ -24,7 +24,7 @@ export const addLaundryOwner = (
   latitude
 ) =>
   axios
-    .post(`${DEV_URL}/owner/register`, {
+    .post(`${BASE_URL}/owner/register`, {
       fullName,
       email,
       contact,
@@ -39,6 +39,14 @@ export const addLaundryOwner = (
 
 export const getLaundryInfo = () =>
   axios
-    .get(`${DEV_URL}/owners`)
+    .get(`${BASE_URL}/owners`)
     .then((res) => res.data)
     .catch((err) => console.error(err));
+
+// client management api
+
+export const deleteClient = (email) =>
+  axios
+    .delete(`${BASE_URL}/owner/delete?email=${email}`)
+    .then((res) => console.log(res.data))
+    .catch((error) => console.log(error));

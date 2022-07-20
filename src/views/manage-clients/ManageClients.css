@@ -64,3 +64,7 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.table-hover:hover{
+  background-color: rgb(244, 244, 244);
+}

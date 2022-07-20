@@ -37,7 +37,7 @@ const OrdersTable = () => {
             {dataLoaded ? (
               <tbody>
                 {data.map((tdata, index) => (
-                  <tr key={index} className="border-top">
+                  <tr key={index} className="border-top table-hover">
                     <td>
                       <div className="d-flex align-items-center p-2">
                         <img

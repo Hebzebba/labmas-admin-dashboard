@@ -119,7 +119,7 @@ const ManageAccount = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-top">
+              <tr className="border-top table-hover">
                 <td>
                   <div className="d-flex align-items-center p-2">
                     <img

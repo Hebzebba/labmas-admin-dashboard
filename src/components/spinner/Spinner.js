@@ -1,4 +1,4 @@
-import "./Spinner.css"
+import "./Spinner.css";
 import { css } from "@emotion/react";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import { Modal, ModalBody } from "reactstrap";
@@ -9,17 +9,26 @@ const override = css`
   border-color: red;
 `;
 
-const Spinner = ({toggle}) => {
-    return (   <Modal isOpen={!toggle} centered={true} fullscreen="md" className="spinner-modal">
-    <ModalBody className="spinner-body">
-    <PacmanLoader
-      color="#03fcf8"
-      loading={!toggle}
-      css={override}
-      size={24}
-    />
-    </ModalBody>
-  </Modal>);
-}
- 
+const Spinner = ({ toggle }) => {
+  return (
+    <Modal
+      isOpen={!toggle}
+      centered={true}
+      fullscreen="md"
+      className="spinner-modal"
+      backdrop={true}
+      zIndex={-1}
+    >
+      <ModalBody className="spinner-body">
+        <PacmanLoader
+          color="#03fcf8"
+          loading={!toggle}
+          css={override}
+          size={24}
+        />
+      </ModalBody>
+    </Modal>
+  );
+};
+
 export default Spinner;
