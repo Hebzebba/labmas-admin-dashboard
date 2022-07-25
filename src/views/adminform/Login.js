@@ -33,7 +33,7 @@ const Login = () => {
     e.preventDefault();
     set_login_status(true);
     axios
-      .post(`${DEV_URL}/admin-login`, { email: user, password: pass })
+      .post(`${BASE_URL}/admin-login`, { email: user, password: pass })
       .then((res) => {
         if (res.data) {
           set_login_status(false);
