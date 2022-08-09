@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import {
   Card,
   CardBody,
@@ -17,48 +17,88 @@ import {
 import user2 from "../../assets/images/users/user2.jpg";
 import "./ManageAccount.css";
 import PhoneInput from "react-phone-input-2";
+import { getAdminData, addAdminData, deleteAdmin } from "../../api/Api";
+import Spinner from "../../components/spinner/Spinner";
+import { useAlert } from "react-alert";
+import { css } from "@emotion/react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
-const Switch = () => {
-  return (
-    <label className="switch">
-      <input type="checkbox" />
-      <span className="slider round"></span>
-    </label>
-  );
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "ADD_ADMIN_LOAD":
+      return { ...state, addStatus: true };
+    case "ADD_ADMIN_LOAD_END":
+      return { ...state, addStatus: false };
+
+    case "DELETE_ADMIN_LOAD":
+      return { ...state, deleteStatus: true };
+    case "DELETE_ADMIN_LOAD_END":
+      return { ...state, deleteStatus: false };
+  }
 };
-
 const ManageAccount = () => {
   const [openModal, setOpeneModal] = useState(false);
+  const [adminData, setAdminData] = useState();
+  const [status, dispatch] = useReducer(reducer, {
+    addStatus: false,
+    deleteStatus: false,
+  });
 
-  const addAdmin = () => (
-    <div>
-      <Modal toggle={function noRefCheck() {}}>
-        <ModalHeader toggle={function noRefCheck() {}}>Modal title</ModalHeader>
-        <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={function noRefCheck() {}}>
-            Do Something
-          </Button>{" "}
-          <Button onClick={function noRefCheck() {}}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
-  );
+  // Form inputs
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminUserEmail, setAdminUserEmail] = useState("");
+  const [adminUserName, setAdminUserName] = useState("");
+  const [adminPassword, setAdminPassword] = useState("changeme");
+  const [phone, setPhone] = useState("");
+  // End of form input
+
+  const alert = useAlert();
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      const adminInfo = await getAdminData();
+      setAdminData(adminInfo);
+    };
+    fetchAdminData();
+  }, [adminData]);
+
+  const handleSubmitAdminData = async () => {
+    dispatch({ type: "ADD_ADMIN_LOAD" });
+    const response = await addAdminData(
+      isAdmin,
+      adminPassword,
+      adminUserEmail,
+      adminUserName,
+      phone
+    );
+
+    if (response[0] === "User data updated") {
+      alert.success(response[0]);
+      dispatch({ type: "ADD_ADMIN_LOAD_END" });
+    }
+  };
+
+  const handleDeleteAdmin = async (email) => {
+    dispatch({ type: "DELETE_ADMIN_LOAD" });
+    const response = await deleteAdmin(email);
+    if (response[0] === "User deleted") {
+      alert.success(response[0]);
+      dispatch({ type: "DELETE_ADMIN_LOAD_END" });
+    }
+  };
   return (
     <div>
       <div>
         <Modal isOpen={openModal}>
-          <ModalHeader>Add Admin</ModalHeader>
-          <ModalBody>
-            <Form>
+          <Form>
+            <ModalHeader>Add Admin</ModalHeader>
+            <ModalBody>
               <FormGroup>
                 <Label for="name">Full name</Label>
                 <Input
@@ -66,6 +106,9 @@ const ManageAccount = () => {
                   name="name"
                   placeholder="Full name"
                   type="text"
+                  value={adminUserName}
+                  onChange={(e) => setAdminUserName(e.target.value)}
+                  required={true}
                 />
               </FormGroup>
               <FormGroup>
@@ -75,6 +118,9 @@ const ManageAccount = () => {
                   name="email"
                   placeholder="Email"
                   type="email"
+                  value={adminUserEmail}
+                  onChange={(e) => setAdminUserEmail(e.target.value)}
+                  required={true}
                 />
               </FormGroup>
 
@@ -85,29 +131,61 @@ const ManageAccount = () => {
                   countryCodeEditable={false}
                   containerStyle={{ width: "100%" }}
                   inputStyle={{ width: "100%" }}
-                  // value={phone}
-                  // onChange={(phone) => setPhone(phone)}
+                  value={phone}
+                  onChange={(phone) => setPhone(phone)}
+                  required={true}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="pass">Password</Label>
+                <Input
+                  id="pass"
+                  name="pass"
+                  placeholder="Password"
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  required={true}
                 />
               </FormGroup>
               <FormGroup check>
-                <Input type="checkbox" /> <Label check>Is Admin</Label>
+                <Input
+                  type="checkbox"
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                  value={isAdmin}
+                />{" "}
+                <Label check>Is Admin</Label>
               </FormGroup>
-            </Form>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary">Submit</Button>
-            <Button onClick={() => setOpeneModal(!openModal)}>Close</Button>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onClick={handleSubmitAdminData}
+                type="submit"
+              >
+                Submit
+                <ScaleLoader
+                  color={"#03e3fc"}
+                  loading={status.addStatus}
+                  css={override}
+                  size={50}
+                />
+              </Button>
+              <Button onClick={() => setOpeneModal(!openModal)}>Close</Button>
+            </ModalFooter>
+          </Form>
         </Modal>
       </div>
       <Card>
         <CardBody>
           <div className="add-admin-container">
             <CardTitle tag="h5">Bookings</CardTitle>
-            <Button color="primary" onClick={() => setOpeneModal(!openModal)}>
-              <i className="bi bi-person-plus" style={{ padding: "5px" }}></i>
-              Add
-            </Button>
+            {localStorage.getItem("isAdmin") !== "false" && (
+              <Button color="primary" onClick={() => setOpeneModal(!openModal)}>
+                <i className="bi bi-person-plus" style={{ padding: "5px" }}></i>
+                Add
+              </Button>
+            )}
           </div>
           <Table className="no-wrap mt-3 align-middle" responsive borderless>
             <thead>
@@ -119,37 +197,61 @@ const ManageAccount = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-top table-hover">
-                <td>
-                  <div className="d-flex align-items-center p-2">
-                    <img
-                      src={user2}
-                      className="rounded-circle"
-                      alt="avatar"
-                      width="45"
-                      height="45"
-                    />
-                    <div className="ms-3">
-                      <h6 className="mb-0">Seth</h6>
-                      <span className="text-muted">testing123@gmail.com</span>
-                    </div>
-                  </div>
-                </td>
-                <td>+897439857</td>
-                <td>
-                  <Switch />
-                </td>
-                <td>
-                  <Button color="primary" style={{ marginRight: "15px" }}>
-                    <i className="bi bi-pencil" style={{ padding: "5px" }}></i>
-                    Edit
-                  </Button>
-                  <Button color="danger">
-                    <i className="bi bi-trash" style={{ padding: "5px" }}></i>
-                    Delete
-                  </Button>
-                </td>
-              </tr>
+              {adminData ? (
+                adminData.map((item, key) => (
+                  <tr className="border-top table-hover" key={key}>
+                    <td>
+                      <div className="d-flex align-items-center p-2">
+                        <img
+                          src={user2}
+                          className="rounded-circle"
+                          alt="avatar"
+                          width="45"
+                          height="45"
+                        />
+                        <div className="ms-3">
+                          <h6 className="mb-0">{item.adminUserName}</h6>
+                          <span className="text-muted">
+                            {item.adminUserEmail}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{item.contact}</td>
+                    <td>
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={item.admin}
+                          onChange={(e) => {}}
+                          disabled
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                    </td>
+                    <td>
+                      <Button
+                        color="danger"
+                        onClick={() => handleDeleteAdmin(item.adminUserEmail)}
+                      >
+                        <i
+                          className="bi bi-trash"
+                          style={{ padding: "5px" }}
+                        ></i>
+                        Delete
+                        <ScaleLoader
+                          color={"#03e3fc"}
+                          loading={status.deleteStatus}
+                          css={override}
+                          size={50}
+                        />
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <Spinner />
+              )}
             </tbody>
           </Table>
         </CardBody>
