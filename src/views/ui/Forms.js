@@ -16,6 +16,14 @@ import "react-phone-input-2/lib/style.css";
 import { useState } from "react";
 import { addLaundryOwner } from "../../api/Api";
 import { useAlert } from "react-alert";
+import { css } from "@emotion/react";
+import ScaleLoader from "react-spinners/ScaleLoader";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const Forms = () => {
   const [fName, setFname] = useState("");
@@ -26,12 +34,13 @@ const Forms = () => {
   const [date, setDate] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
+  const [status, setStatus] = useState(false);
 
   const alert = useAlert();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setStatus(!status);
     const submitForm = async () => {
       const response = await addLaundryOwner(
         fName,
@@ -44,125 +53,143 @@ const Forms = () => {
         latitude
       );
       if (response[0] === "User Registered") {
+        setStatus(status);
         alert.success("User Registered");
+        setFname("");
+        setEmail("");
+        setPhone("");
+        setLaundryName("");
+        setPhone("");
+        setInfo("");
+        setDate("");
+        setLongitude("");
+        setLatitude("");
       }
     };
     submitForm();
   };
 
   return (
-    <Row>
-      <Col>
-        <Card>
-          <CardTitle tag="h6" className="border-bottom p-3 mb-0">
-            <i className="bi bi-folder-plus me-2"> </i>
-            Register client
-          </CardTitle>
-          <CardBody>
-            <Form onSubmit={handleSubmit}>
-              <FormGroup>
-                <Label for="fName">Full Name</Label>
-                <Input
-                  id="fName"
-                  name="f_name"
-                  type="text"
-                  value={fName}
-                  onChange={(e) => setFname(e.target.value)}
-                  required
-                />
-              </FormGroup>
+    <div>
+      <Row>
+        <Col>
+          <Card>
+            <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+              <i className="bi bi-folder-plus me-2"> </i>
+              Register client
+            </CardTitle>
+            <CardBody>
+              <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                  <Label for="fName">Full Name</Label>
+                  <Input
+                    id="fName"
+                    name="f_name"
+                    type="text"
+                    value={fName}
+                    onChange={(e) => setFname(e.target.value)}
+                    required
+                  />
+                </FormGroup>
 
-              <FormGroup>
-                <Label for="email">Email</Label>
-                <Input
-                  id="email"
-                  name="contact"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="contact">Contact</Label>
-                <PhoneInput
-                  country={"gh"}
-                  countryCodeEditable={false}
-                  containerStyle={{ width: "100%" }}
-                  inputStyle={{ width: "100%" }}
-                  value={phone}
-                  onChange={(phone) => setPhone(phone)}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="lName">Laundry Name</Label>
-                <Input
-                  id="lName"
-                  name="L_name"
-                  type="text"
-                  value={laundryName}
-                  onChange={(e) => setLaundryName(e.target.value)}
-                  required
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="info">Description</Label>
-                <Input
-                  id="info"
-                  name="text"
-                  type="textarea"
-                  onChange={(e) => setInfo(e.target.value)}
-                />
-              </FormGroup>
+                <FormGroup>
+                  <Label for="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="contact"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="contact">Contact</Label>
+                  <PhoneInput
+                    country={"gh"}
+                    countryCodeEditable={false}
+                    containerStyle={{ width: "100%" }}
+                    inputStyle={{ width: "100%" }}
+                    value={phone}
+                    onChange={(phone) => setPhone(phone)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="lName">Laundry Name</Label>
+                  <Input
+                    id="lName"
+                    name="L_name"
+                    type="text"
+                    value={laundryName}
+                    onChange={(e) => setLaundryName(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="info">Description</Label>
+                  <Input
+                    id="info"
+                    name="text"
+                    type="textarea"
+                    onChange={(e) => setInfo(e.target.value)}
+                  />
+                </FormGroup>
 
-              <FormGroup>
-                <Label for="date">Date</Label>
-                <Input
-                  id="date"
-                  name="date"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                />
-              </FormGroup>
-              <Label>Coordinate</Label>
-              <Row>
-                <Col md={4}>
-                  <FormGroup>
-                    <Input
-                      id="long"
-                      name="long"
-                      placeholder="Longitude"
-                      type="number"
-                      value={longitude}
-                      onChange={(e) => setLongitude(e.target.value)}
-                      required
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={4}>
-                  <FormGroup>
-                    <Input
-                      id="lat"
-                      name="lat"
-                      placeholder="Latitude"
-                      type="number"
-                      value={latitude}
-                      onChange={(e) => setLatitude(e.target.value)}
-                      required
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-              <Button type="submit" color="primary">
-                Submit
-              </Button>
-            </Form>
-          </CardBody>
-        </Card>
-      </Col>
-    </Row>
+                <FormGroup>
+                  <Label for="date">Date</Label>
+                  <Input
+                    id="date"
+                    name="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <Label>Coordinate</Label>
+                <Row>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Input
+                        id="long"
+                        name="long"
+                        placeholder="Longitude"
+                        type="number"
+                        value={longitude}
+                        onChange={(e) => setLongitude(e.target.value)}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={4}>
+                    <FormGroup>
+                      <Input
+                        id="lat"
+                        name="lat"
+                        placeholder="Latitude"
+                        type="number"
+                        value={latitude}
+                        onChange={(e) => setLatitude(e.target.value)}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Button type="submit" color="primary">
+                  Submit
+                  <ScaleLoader
+                    color={"#03e3fc"}
+                    loading={status}
+                    css={override}
+                    size={50}
+                  />
+                </Button>
+              </Form>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

@@ -41,7 +41,8 @@ const Login = () => {
           if (data === "No record found" || data === "Authentication failed") {
             alert.error("Invalid User or password");
           } else {
-            localStorage.setItem("admin", data[0]["adminUser"]);
+            localStorage.setItem("admin", data[0]["adminUserName"]);
+            localStorage.setItem("isAdmin", data[0]["admin"]);
             navigate("/");
           }
         }

@@ -15,18 +15,30 @@ import {
   Input,
 } from "reactstrap";
 import Spinner from "../../components/spinner/Spinner";
-import { deleteClient, getLaundryInfo } from "../../api/Api";
+import { deleteClient, getLaundryInfo, updateClient } from "../../api/Api";
+import { useAlert } from "react-alert";
 import "./ManageClients.css";
+import PhoneInput from "react-phone-input-2";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { css } from "@emotion/react";
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const ManageClients = () => {
   const [laundryInfo, setLaundryInfo] = useState();
   const [load, setLoad] = useState(false);
   const [modal, setModal] = useState(false);
-
+  const [status, setStatus] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [laundryName, setlaundryName] = useState("");
+
+  const alert = useAlert();
 
   useEffect(() => {
     const getLaundrydata = async () => {
@@ -38,29 +50,42 @@ const ManageClients = () => {
     };
 
     getLaundrydata();
-  }, []);
+  }, [laundryInfo]);
+
+  const handleSubmit = async (e) => {
+    setStatus(true);
+    const response = await updateClient(email, contact, name, laundryName);
+    if (response[0] === "User data updated") {
+      setStatus(false);
+      alert.success(response[0]);
+    }
+  };
+
   const toggle = () => setModal(!modal);
-  const showModal = (name, email, contact, laundryName) => (
+  const showModal = (name, contact, laundryName) => (
     <Modal isOpen={modal} toggle={toggle}>
       <ModalHeader toggle={toggle}>Update client info</ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup>
             <Label for="name">Name</Label>
-            <Input id="name" name="name" placeholder={name} type="text" />
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </FormGroup>
-          <FormGroup>
-            <Label for="email">Email</Label>
-            <Input id="email" name="email" placeholder={email} type="email" />
-          </FormGroup>
-
           <FormGroup>
             <Label for="contact">Contact</Label>
-            <Input
-              id="contact"
-              name="contact"
-              placeholder={contact}
-              type="text"
+            <PhoneInput
+              country={"gh"}
+              countryCodeEditable={false}
+              containerStyle={{ width: "100%" }}
+              inputStyle={{ width: "100%" }}
+              value={contact}
+              onChange={(contact) => setContact(contact)}
             />
           </FormGroup>
           <FormGroup>
@@ -75,7 +100,15 @@ const ManageClients = () => {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="primary">Update</Button>{" "}
+        <Button color="primary" onClick={handleSubmit}>
+          Update
+          <ScaleLoader
+            color={"#03e3fc"}
+            loading={status}
+            css={override}
+            size={50}
+          />
+        </Button>{" "}
         <Button color="danger" onClick={toggle}>
           Cancel
         </Button>
@@ -136,7 +169,12 @@ const ManageClients = () => {
                       </Button>
                       <Button
                         color="danger"
-                        onClick={() => deleteClient(item.email)}
+                        onClick={async () => {
+                          const res = await deleteClient(item.email);
+                          if (res[0] === "User deleted") {
+                            alert.success("User deleted successfully");
+                          }
+                        }}
                       >
                         <i
                           className="bi bi-trash"
@@ -151,7 +189,7 @@ const ManageClients = () => {
                 <Spinner />
               )}
             </tbody>
-            {showModal(name, email, contact, laundryName)}
+            {showModal(name, contact, laundryName)}
           </Table>
         </CardBody>
       </Card>
